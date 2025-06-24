@@ -1,0 +1,4 @@
+2025-06-11 16:00:58 - Checando ID: 2. Estoque Atual: 5. Estoque Mínimo: 5. A condição ($e_atual <= $e_min) é: VERDADEIRO
+2025-06-11 16:37:29 - Checando ID: 2. Estoque Atual: 3. Estoque Mínimo: 5. A condição ($e_atual <= $e_min) é: VERDADEIRO
+2025-06-11 16:37:29 - Checando ID: 1. Estoque Atual: 89. Estoque Mínimo: 5. A condição ($e_atual <= $e_min) é: FALSO
+2025-06-11 16:37:29 - Checando ID: 4. Estoque Atual: 69. Estoque Mínimo: 5. A condição ($e_atual <= $e_min) é: FALSO

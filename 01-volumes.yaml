@@ -1,0 +1,95 @@
+# Volume e Claim para o Banco de Dados de Usuários
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-usuarios
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/usuarios" # O diretório no nó do K8s
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-usuarios
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Volume e Claim para o Banco de Dados de Estoque
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-estoque
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/estoque" # O diretório no nó do K8s
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-estoque
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Volume e Claim para o Banco de Dados de Vendas
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-vendas
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/vendas" # O diretório no nó do K8s
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-vendas
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Volume e Claim para os Uploads das Aplicações
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-uploads
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce # Acessível por um nó por vez
+  hostPath:
+    path: "/mnt/data/uploads" # Adapte este caminho para um diretório que exista no seu nó Kubernetes
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-uploads
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

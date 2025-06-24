@@ -1,0 +1,182 @@
+# --- Banco de Dados de Usuários ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-usuarios-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-usuarios
+  template:
+    metadata:
+      labels:
+        app: db-usuarios
+    spec:
+      containers:
+      - name: db-usuarios
+        image: mysql:8.0
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        env:
+        - name: MYSQL_DATABASE
+          value: "usuarios_db"
+        - name: MYSQL_USER
+          value: "app_user"
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: MYSQL_ROOT_PASSWORD
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: db-usuarios-storage
+          mountPath: /var/lib/mysql
+        - name: init-script-usuarios
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: db-usuarios-storage
+        persistentVolumeClaim:
+          claimName: pvc-usuarios
+      - name: init-script-usuarios
+        configMap:
+          name: usuarios-sql-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-usuarios-service
+spec:
+  selector:
+    app: db-usuarios
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+# --- Banco de Dados de Estoque ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-estoque-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-estoque
+  template:
+    metadata:
+      labels:
+        app: db-estoque
+    spec:
+      containers:
+      - name: db-estoque
+        image: mysql:8.0
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        env:
+        - name: MYSQL_DATABASE
+          value: "estoque_db"
+        - name: MYSQL_USER
+          value: "app_user"
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: MYSQL_ROOT_PASSWORD
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: db-estoque-storage
+          mountPath: /var/lib/mysql
+        - name: init-script-estoque
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: db-estoque-storage
+        persistentVolumeClaim:
+          claimName: pvc-estoque
+      - name: init-script-estoque
+        configMap:
+          name: estoque-sql-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-estoque-service
+spec:
+  selector:
+    app: db-estoque
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+# --- Banco de Dados de Vendas ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-vendas-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-vendas
+  template:
+    metadata:
+      labels:
+        app: db-vendas
+    spec:
+      containers:
+      - name: db-vendas
+        image: mysql:8.0
+        args: ["--default-authentication-plugin=mysql_native_password"]
+        env:
+        - name: MYSQL_DATABASE
+          value: "vendas_db"
+        - name: MYSQL_USER
+          value: "app_user"
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-credentials
+              key: MYSQL_ROOT_PASSWORD
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: db-vendas-storage
+          mountPath: /var/lib/mysql
+        - name: init-script-vendas
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: db-vendas-storage
+        persistentVolumeClaim:
+          claimName: pvc-vendas
+      - name: init-script-vendas
+        configMap:
+          name: vendas-sql-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-vendas-service
+spec:
+  selector:
+    app: db-vendas
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306

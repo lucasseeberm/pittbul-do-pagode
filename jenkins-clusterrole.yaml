@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: jenkins-cluster-role
+rules:
+# Permissão para recursos de escopo de cluster (como PersistentVolume)
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["*"]
+# Permissão para recursos dentro de namespaces (como Deployments, Pods, etc.)
+- apiGroups: ["", "apps", "extensions"]
+  resources: ["deployments", "services", "pods", "secrets", "configmaps", "persistentvolumeclaims"]
+  verbs: ["*"]

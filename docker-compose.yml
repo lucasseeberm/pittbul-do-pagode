@@ -1,0 +1,110 @@
+services:
+  # --- SERVIÇO DE USUÁRIOS ---
+  db_usuarios:
+    image: mysql:8.0
+    container_name: db_usuarios
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: usuarios_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - usuarios_data:/var/lib/mysql
+      - ./database/usuarios.sql:/docker-entrypoint-initdb.d/1_schema.sql # <-- ADICIONE ESTA LINHA
+    ports:
+      - "33061:3306"
+    networks:
+      - farmacia-net
+
+  app_usuarios:
+    # ... (sem mudanças aqui)
+    build:
+      context: ./modulos/usuarios
+    container_name: app_usuarios
+    ports:
+      - "8081:80"
+    volumes:
+      - ./modulos/usuarios:/var/www/html
+    depends_on:
+      - db_usuarios
+    networks:
+      - farmacia-net
+
+  # --- SERVIÇO DE ESTOQUE ---
+  db_estoque:
+    image: mysql:8.0
+    container_name: db_estoque
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: estoque_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - estoque_data:/var/lib/mysql
+      - ./database/estoque.sql:/docker-entrypoint-initdb.d/1_schema.sql # <-- ADICIONE ESTA LINHA
+    ports:
+      - "33062:3306"
+    networks:
+      - farmacia-net
+
+  app_estoque:
+    # ... (sem mudanças aqui)
+    build:
+      context: ./modulos/estoque
+    container_name: app_estoque
+    ports:
+      - "8082:80"
+    volumes:
+      - ./modulos/estoque:/var/www/html
+    depends_on:
+      - db_estoque
+    networks:
+      - farmacia-net
+
+  # --- SERVIÇO DE VENDAS ---
+  db_vendas:
+    image: mysql:8.0
+    container_name: db_vendas
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: vendas_db
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD: app_password
+    volumes:
+      - vendas_data:/var/lib/mysql
+      - ./database/vendas.sql:/docker-entrypoint-initdb.d/1_schema.sql # <-- ADICIONE ESTA LINHA
+    ports:
+      - "33063:3306"
+    networks:
+      - farmacia-net
+
+  app_vendas:
+    # ... (sem mudanças aqui)
+    build:
+      context: ./modulos/vendas
+    container_name: app_vendas
+    ports:
+      - "8083:80"
+    volumes:
+      - ./modulos/vendas:/var/www/html
+    depends_on:
+      - db_vendas
+    networks:
+      - farmacia-net
+
+# Definição dos volumes (sem mudanças aqui)
+volumes:
+  usuarios_data:
+  estoque_data:
+  vendas_data:
+
+# Definição da rede (sem mudanças aqui)
+networks:
+  farmacia-net:
+    driver: bridge

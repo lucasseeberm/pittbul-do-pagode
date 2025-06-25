@@ -13,12 +13,10 @@ spec:
       labels:
         app: app-usuarios
     spec:
-      # ----> INÍCIO DA ALTERAÇÃO <----
       securityContext:
         fsGroup: 33
         runAsUser: 33
         runAsGroup: 33
-      # ----> FIM DA ALTERAÇÃO <----
       containers:
       - name: app-usuarios
         image: app-usuarios:latest
@@ -42,7 +40,7 @@ spec:
         - name: VENDAS_API_URL
           value: "http://app-vendas-service:8083"
         - name: APP_BASE_URL
-          value: "http://localhost:8081" # Substitua pelo seu IP
+          value: "http://localhost:30081"
         volumeMounts:
         - name: uploads-storage
           mountPath: /var/www/html/uploads
@@ -58,11 +56,12 @@ metadata:
 spec:
   selector:
     app: app-usuarios
-  type: LoadBalancer
+  type: NodePort
   ports:
   - protocol: TCP
     port: 8081
     targetPort: 80
+    nodePort: 30081
 ---
 # --- Aplicação de Estoque ---
 apiVersion: apps/v1
@@ -79,12 +78,10 @@ spec:
       labels:
         app: app-estoque
     spec:
-      # ----> INÍCIO DA ALTERAÇÃO <----
       securityContext:
         fsGroup: 33
         runAsUser: 33
         runAsGroup: 33
-      # ----> FIM DA ALTERAÇÃO <----
       containers:
       - name: app-estoque
         image: app-estoque:latest
@@ -111,11 +108,12 @@ metadata:
 spec:
   selector:
     app: app-estoque
-  type: LoadBalancer
+  type: NodePort
   ports:
   - protocol: TCP
     port: 8082
     targetPort: 80
+    nodePort: 30082
 ---
 # --- Aplicação de Vendas ---
 apiVersion: apps/v1
@@ -132,12 +130,10 @@ spec:
       labels:
         app: app-vendas
     spec:
-      # ----> INÍCIO DA ALTERAÇÃO <----
       securityContext:
         fsGroup: 33
         runAsUser: 33
         runAsGroup: 33
-      # ----> FIM DA ALTERAÇÃO <----
       containers:
       - name: app-vendas
         image: app-vendas:latest
@@ -166,8 +162,9 @@ metadata:
 spec:
   selector:
     app: app-vendas
-  type: LoadBalancer
+  type: NodePort
   ports:
   - protocol: TCP
     port: 8083
     targetPort: 80
+    nodePort: 30083

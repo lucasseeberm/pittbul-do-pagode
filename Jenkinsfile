@@ -7,7 +7,7 @@ pipeline {
             steps {
                 echo 'Baixando o código do repositório...'
                 // IMPORTANTE: Substitua pela URL do seu repositório Git
-                git branch: 'main', url: 'https://github.com/lucasseeberm/pittbul-do-pagode.git'
+                git branch: 'main', url: 'https://github.com/TsukiShogun/pitbull-do-samba.git'
             }
         }
 
